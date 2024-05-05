@@ -1,28 +1,30 @@
+import asyncio
 import time
-import board
-import adafruit_dht
 
-# Initial the dht device, with data pin connected to:
-dhtDevice = adafruit_dht.DHT22(board.D18)
+from sensors import service, mock
 
-while True:
-    try:
-        # Print the values to the serial port
-        temperature = dhtDevice.temperature
-        humidity = dhtDevice.humidity
-        print(
-            "Temp: {:.1f} C / Humidity: {}% ".format(
-                temperature, humidity
-            )
-        )
+async def read_sensor_values(sensor_service):
+    return sensor_service.read_sensor_values()
 
-    except RuntimeError as error:
-        # Errors happen fairly often, DHT's are hard to read, just keep going
-        print(error.args[0])
-        time.sleep(2.0)
-        continue
-    except Exception as error:
-        dhtDevice.exit()
-        raise error
+async def process_sensor_values(sensor_service):
+    while True:
+        sensor_values = await read_sensor_values(sensor_service)
+        print(sensor_values)
+        await asyncio.sleep(2.0)
 
-    time.sleep(2.0)
+async def main():
+    print(f"Started at {time.strftime('%X')}")
+
+    sensor_service = service.SensorService([
+        mock.SensorMock("sensor1", "plant1"),
+        # dht22.SensorDHT22("sensor1", "plant1"),
+    ])
+
+    await process_sensor_values(sensor_service)
+
+    # async with asyncio.TaskGroup() as tg:
+    #     task1 = tg.create_task(sensor.read_values())
+
+    print(f"Finished at {time.strftime('%X')}")
+
+asyncio.run(main())
