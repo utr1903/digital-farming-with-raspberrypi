@@ -12,8 +12,8 @@ async def process_sensor_values(sensor_service, db_service):
         db_service.write_values(sensor_values)
         await asyncio.sleep(2.0)
 
-async def start_server():
-    srv = server.Server()
+async def start_server(db_prometheus):
+    srv = server.Server(db_prometheus)
     srv.run()
 
 async def main():
@@ -24,13 +24,14 @@ async def main():
         # dht22.SensorDHT22("sensor1", "plant1"),
     ])
 
+    db_prometheus = prometheus.DBPrometheus()
     db_service = db_svc.DBService([
-        prometheus.DBPrometheus(),
+        db_prometheus,
     ])
 
     async with asyncio.TaskGroup() as tg:
         task1 = tg.create_task(process_sensor_values(sensor_service, db_service))
-        task2 = tg.create_task(start_server())
+        task2 = tg.create_task(start_server(db_prometheus))
 
     print(f"Finished at {time.strftime('%X')}")
 
