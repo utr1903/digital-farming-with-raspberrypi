@@ -1,27 +1,43 @@
 import json
 from flask import Flask, Response
+from prometheus_client import generate_latest
 
 class Server:
 
     def __init__(self):
         self.app = Flask(__name__)
-
         self.register_endpoints()
 
     def register_endpoints(self):
         self.app.add_url_rule(
             rule="/",
-            endpoint="test",
-            view_func=self.test,
+            endpoint="ping",
+            view_func=self.ping,
+            methods=["GET"]
+        )
+        self.app.add_url_rule(
+            rule="/metrics",
+            endpoint="metrics",
+            view_func=self.metrics,
             methods=["GET"]
         )
 
-    def test(self):
-        body = {
-            "test": "hello"
-        }
+    def ping(self):
+        body = {"ping": "pong"}
         resp = Response(
-            response=json.dumps(body), status=200, mimetype="application/json")
+            response=json.dumps(body),
+            status=200,
+            mimetype="application/json",
+        )
+        return resp
+
+    def metrics(self):
+        body = generate_latest()
+        resp = Response(
+            response=body,
+            status=200,
+            mimetype="text/plain",
+        )
         return resp
 
     def run(self):
