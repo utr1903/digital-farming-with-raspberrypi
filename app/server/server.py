@@ -1,16 +1,12 @@
 import json
 from flask import Flask, Response
+from prometheus_client import generate_latest
 
 class Server:
 
     def __init__(self):
         self.app = Flask(__name__)
         self.register_endpoints()
-    
-    def __init__(self, db_prometheus):
-        self.app = Flask(__name__)
-        self.register_endpoints()
-        self.db_prometheus = db_prometheus
 
     def register_endpoints(self):
         self.app.add_url_rule(
@@ -36,7 +32,7 @@ class Server:
         return resp
 
     def metrics(self):
-        body = self.db_prometheus.generate_latest()
+        body = generate_latest()
         resp = Response(
             response=body,
             status=200,

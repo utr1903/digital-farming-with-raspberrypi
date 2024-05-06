@@ -34,9 +34,3 @@ class DBPrometheus(base.DBBase):
             sensor=sensor_name,
             plant=plant_name,
         ).set(humidity)
-
-    def generate_latest(self):
-        metrics = []
-        for k, v in self.metrics.items():
-            metrics.append(generate_latest(v))
-        return metrics
