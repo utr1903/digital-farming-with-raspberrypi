@@ -1,4 +1,4 @@
-from prometheus_client import Gauge, generate_latest
+from prometheus_client import Gauge, start_http_server
 
 from dbs import base
 
@@ -21,9 +21,9 @@ class DBPrometheus(base.DBBase):
                 unit="percentage",
             ),
         }
+        start_http_server(8000)
 
     def write_temperature(self, temperature, sensor_name, plant_name):
-        print(temperature)
         self.metrics["temperature"].labels(
             sensor=sensor_name,
             plant=plant_name,
