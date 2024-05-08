@@ -8,7 +8,7 @@ datasources:
     type: prometheus
     url: http://localhost:9090
     access: proxy
-    isDefault: false
+    isDefault: true
 EOF
 
 # Dashboard providers
