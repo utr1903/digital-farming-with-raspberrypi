@@ -106,7 +106,7 @@
                         "uid": "PBFA97CFB590B2093"
                     },
                     "editorMode": "code",
-                    "expr": "digital_farming_temperature_celcius",
+                    "expr": "avg by (sensor) (digital_farming_humidity_percentage{sensor=~\"$sensors\"})",
                     "instant": false,
                     "legendFormat": "__auto",
                     "range": true,
@@ -201,7 +201,7 @@
                         "uid": "PBFA97CFB590B2093"
                     },
                     "editorMode": "code",
-                    "expr": "digital_farming_humidity_percentage",
+                    "expr": "avg by (sensor) (digital_farming_temperature_celcius{sensor=~\"$sensors\"})",
                     "instant": false,
                     "legendFormat": "__auto",
                     "range": true,
@@ -222,10 +222,10 @@
                 "current": {
                     "selected": true,
                     "text": [
-                        "sensor1"
+                        "All"
                     ],
                     "value": [
-                        "sensor1"
+                        "$__all"
                     ]
                 },
                 "datasource": {
@@ -260,6 +260,6 @@
     "timezone": "browser",
     "title": "Digital Farming",
     "uid": "adl2b6zaub11cf",
-    "version": 2,
+    "version": 4,
     "weekStart": ""
 }
