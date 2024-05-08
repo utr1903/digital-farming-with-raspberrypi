@@ -1,24 +1,14 @@
-import asyncio
+import logging
 import time
+import multiprocessing
 
 from sensors import service as sensor_svc, mock
 from dbs import service as db_svc, prometheus
 from server import server
 
-async def process_sensor_values(sensor_service, db_service):
-    while True:
-        sensor_values = sensor_service.read_sensor_values()
-        print(sensor_values)
-        db_service.write_values(sensor_values)
-        await asyncio.sleep(2.0)
+logging.basicConfig(level=logging.INFO)
 
-async def start_server():
-    srv = server.Server()
-    srv.run()
-
-async def main():
-    print(f"Started at {time.strftime('%X')}")
-
+def process_sensor_values():
     sensor_service = sensor_svc.SensorService([
         mock.SensorMock("sensor1", "plant1"),
         # dht22.SensorDHT22("sensor1", "plant1"),
@@ -28,10 +18,25 @@ async def main():
         prometheus.DBPrometheus(),
     ])
 
-    async with asyncio.TaskGroup() as tg:
-        task1 = tg.create_task(process_sensor_values(sensor_service, db_service))
-        task2 = tg.create_task(start_server())
+    while True:
+        sensor_values = sensor_service.read_sensor_values()
+        db_service.write_values(sensor_values)
+        time.sleep(2.0)
 
-    print(f"Finished at {time.strftime('%X')}")
+def start_server():
+    srv = server.Server()
+    srv.run()
 
-asyncio.run(main())
+def main():
+    processes = []
+    processes.append(multiprocessing.Process(target=process_sensor_values))
+    processes.append(multiprocessing.Process(target=start_server))
+    
+    for p in processes:
+        p.start()
+
+    for p in processes:
+        p.join()
+
+if __name__ == '__main__':
+    main()
