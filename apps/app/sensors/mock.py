@@ -1,3 +1,5 @@
+import random
+
 from sensors import base
 
 class SensorMock(base.SensorBase):
@@ -6,7 +8,7 @@ class SensorMock(base.SensorBase):
         super().__init__(sensor_name, plant_name)
 
     def read_temperature(self):
-        return 20.0
+        return random.randint(10, 30)
 
     def read_humidity(self):
-        return 50.0
+        return random.randint(40, 70)

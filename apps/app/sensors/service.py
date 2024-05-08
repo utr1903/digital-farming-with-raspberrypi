@@ -1,3 +1,6 @@
+import logging
+
+logger = logging.getLogger(__name__)
 
 class SensorService():
 
@@ -21,4 +24,5 @@ class SensorService():
                 "humidity": humidity,
             }
 
+        logger.info(sensor_values)
         return sensor_values

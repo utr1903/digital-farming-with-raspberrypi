@@ -1,11 +1,14 @@
 import json
+
+from waitress import serve
 from flask import Flask, Response
-from prometheus_client import generate_latest
 
 class Server:
 
     def __init__(self):
         self.app = Flask(__name__)
+        self.app.debug = False
+        self.app.use_reloader = False
         self.register_endpoints()
 
     def register_endpoints(self):
@@ -13,12 +16,6 @@ class Server:
             rule="/",
             endpoint="ping",
             view_func=self.ping,
-            methods=["GET"]
-        )
-        self.app.add_url_rule(
-            rule="/metrics",
-            endpoint="metrics",
-            view_func=self.metrics,
             methods=["GET"]
         )
 
@@ -31,14 +28,5 @@ class Server:
         )
         return resp
 
-    def metrics(self):
-        body = generate_latest()
-        resp = Response(
-            response=body,
-            status=200,
-            mimetype="text/plain",
-        )
-        return resp
-
     def run(self):
-        self.app.run(debug=False, port=8080)
+        serve(self.app, host="127.0.0.1", port=8080)
