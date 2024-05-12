@@ -6,6 +6,7 @@ apiVersion: 1
 datasources:
   - name: Prometheus
     type: prometheus
+    uid: prometheus
     url: http://localhost:9090
     access: proxy
     isDefault: true
@@ -23,5 +24,5 @@ providers:
     disableDeletion: true
     editable: true
     options:
-    path: $(pwd)/dashboards
+      path: $(pwd)/dashboards
 EOF

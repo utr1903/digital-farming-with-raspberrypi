@@ -1,0 +1,62 @@
+apiVersion: 1
+groups:
+  - orgId: 1
+    name: Humidity
+    folder: Alerts
+    interval: 10s
+    rules:
+      - uid: edl6py6hgedj4d
+        title: Humidity too low
+        condition: B
+        data:
+          - refId: A
+            relativeTimeRange:
+              from: 300
+              to: 0
+            datasourceUid: prometheus
+            model:
+              editorMode: code
+              expr: avg by (plant) (digital_farming_humidity_percentage)
+              instant: true
+              intervalMs: 1000
+              legendFormat: __auto
+              maxDataPoints: 43200
+              range: false
+              refId: A
+          - refId: B
+            datasourceUid: __expr__
+            model:
+              conditions:
+                - evaluator:
+                    params:
+                      - 70
+                      - 0
+                    type: lt
+                  operator:
+                    type: and
+                  query:
+                    params: []
+                  reducer:
+                    params: []
+                    type: avg
+                  type: query
+                  unloadEvaluator:
+                    params:
+                      - 70
+                      - 0
+                    type: gt
+              datasource:
+                name: Expression
+                type: __expr__
+                uid: __expr__
+              expression: A
+              intervalMs: 1000
+              maxDataPoints: 43200
+              refId: B
+              type: threshold
+        noDataState: NoData
+        execErrState: Error
+        for: 10s
+        annotations: {}
+        labels: {}
+        isPaused: false
