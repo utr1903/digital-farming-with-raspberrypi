@@ -24,5 +24,5 @@ class SensorService():
                 "humidity": humidity,
             }
 
-        logger.info(sensor_values)
+        logger.debug(sensor_values)
         return sensor_values
