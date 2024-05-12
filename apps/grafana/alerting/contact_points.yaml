@@ -1,0 +1,19 @@
+apiVersion: 1
+contactPoints:
+  - orgId: 1
+    name: Humidity too low
+    receivers:
+      - uid: fdl6qp3z0o5xdf
+        type: webhook
+        settings:
+          httpMethod: POST
+          url: http://localhost:8080/actor
+        disableResolveMessage: false
+  - orgId: 1
+    name: email receiver
+    receivers:
+      - uid: adl6qp3z0o5xcb
+        type: email
+        settings:
+          addresses: <example@email.com>
+        disableResolveMessage: false
