@@ -26,7 +26,7 @@ def process_sensor_values():
 
 def start_server():
     actor_service = actor_svc.ActorService({
-        "actor1": actor_mock.ActorMock("actor1")
+        "actor1": actor_mock.ActorMock("actor1", "plant1")
     })
     srv = server.Server(actor_service)
     srv.run()

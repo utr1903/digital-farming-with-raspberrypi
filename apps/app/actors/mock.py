@@ -6,8 +6,8 @@ logger = logging.getLogger(__name__)
 
 class ActorMock(base.ActorBase):
 
-    def __init__(self, actor_name):
-        super().__init__(actor_name)
+    def __init__(self, actor_name, plant_name):
+        super().__init__(actor_name, plant_name)
 
     def turn_on(self):
         logger.info(f"Turning on actor [{self.get_actor_name()}]...")

@@ -9,6 +9,9 @@ class ActorBase(ABC):
     def get_actor_name(self):
         return self.sensor_name
 
+    def get_plant_name(self):
+        return self.plant_name
+
     @abstractmethod
     def turn_on(self):
         pass
