@@ -1,9 +1,10 @@
+import logging
 import json
 
 from waitress import serve
 from flask import Flask, request, Response
 
-from actors import service as actor_svc
+logger = logging.getLogger(__name__)
 
 class Server:
 
@@ -40,7 +41,7 @@ class Server:
     
     def actor(self):
         body = request.json
-        print(body)
+        logger.debug(body)
 
         if body["state"] == "alerting":
             if body["receiver"] == "Humidity too low":
