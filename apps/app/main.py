@@ -2,15 +2,16 @@ import logging
 import time
 import multiprocessing
 
-from sensors import service as sensor_svc, mock
+from sensors import service as sensor_svc, mock as sensor_mock
 from dbs import service as db_svc, prometheus
+from actors import service as actor_svc, mock as actor_mock
 from server import server
 
 logging.basicConfig(level=logging.INFO)
 
 def process_sensor_values():
     sensor_service = sensor_svc.SensorService([
-        mock.SensorMock("sensor1", "plant1"),
+        sensor_mock.SensorMock("sensor1", "plant1"),
         # dht22.SensorDHT22("sensor1", "plant1"),
     ])
 
@@ -24,7 +25,10 @@ def process_sensor_values():
         time.sleep(2.0)
 
 def start_server():
-    srv = server.Server()
+    actor_service = actor_svc.ActorService({
+        "actor1": actor_mock.ActorMock("actor1")
+    })
+    srv = server.Server(actor_service)
     srv.run()
 
 def main():
